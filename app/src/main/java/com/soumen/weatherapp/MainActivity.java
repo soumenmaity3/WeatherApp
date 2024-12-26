@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String city = edtText.getText().toString();
+                String city = edtText.getText().toString().trim();
                 getWeather(city);
             }
         });
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showError(String errorMessage) {
-        txtWeather.setText("");
+        txtWeather.setText("I can't find.");
         Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
     }
 
