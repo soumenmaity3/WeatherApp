@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String city = edtText.getText().toString().trim();
                 getWeather(city);
+                edtText.setText("");
+                edtText.clearFocus();
             }
         });
 
