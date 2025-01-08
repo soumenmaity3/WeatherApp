@@ -1,5 +1,6 @@
 package com.soumen.weatherapp;
 
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -18,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import android.location.Location;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -33,9 +35,11 @@ public class MainActivity extends AppCompatActivity {
     TextView txtWeather;
     WeatherService weatherService;
     FusedLocationProviderClient fusedLocationClient;
+    ProgressBar pgbar;
 
     double latitude, longitude;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
         btnSearch = findViewById(R.id.buttonGetWeather);
         btnSearchLocation = findViewById(R.id.buttonGetLocation);
         txtWeather = findViewById(R.id.textViewWeather);
+        pgbar = findViewById(R.id.progress_circular);
 
+        pgbar.setVisibility(View.GONE);
         weatherService = new WeatherService();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String city = edtText.getText().toString().trim();
                 getWeather(city);
+                pgbar.setVisibility(View.VISIBLE);
                 edtText.setText("");
                 edtText.clearFocus();
             }
@@ -76,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAndRequestLocationPermission();
+                pgbar.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -108,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                             getWeather(cityName);
                         } else {
                             Toast.makeText(MainActivity.this, "Unable to fetch location", Toast.LENGTH_SHORT).show();
+                            pgbar.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -136,20 +145,38 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     WeatherResponse weather = weatherService.getWeather(city);
 
+                    String rainData;
                     if (weather != null) {
+                        if (weather.bristy != null) {
+                            rainData = "Rain: " + weather.bristy.rain + " mm";
+                        } else {
+                            rainData = "0 mm";
+                        }
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                txtWeather.setText("City name:"+city+"\nTemperature: " + weather.main.temp + " °C\n" +
+                                txtWeather.setText("City name: " + city + "\nTemperature: " + weather.main.temp + " °C\n" +
                                         "Pressure: " + weather.main.pressure + " hPa\n" +
-                                        "Humidity: " + weather.main.humidity + " %");
+                                        "Humidity: " + weather.main.humidity + " %\n" +
+                                        "Wind: " + weather.wind.speed * 3.6f + " KMpH\n" +
+                                        "Direction: " + weather.wind.deg + "°\n" +
+                                        "Rain(Now): " + rainData + "\n" +
+                                        "Cloud: " + weather.main.clouds);
+                                pgbar.setVisibility(View.GONE);
                             }
                         });
                     } else {
-                        showError("City not found or invalid data");
+                        runOnUiThread(() -> {
+                            showError("City not found or invalid data");
+                            pgbar.setVisibility(View.GONE);
+                        });
                     }
                 } catch (Exception e) {
-                    runOnUiThread(() -> showError("Failed to retrieve weather data"));
+                    runOnUiThread(() -> {
+                        showError("Failed to retrieve weather data");
+                        pgbar.setVisibility(View.GONE);
+                    });
                 }
             }
         });
@@ -168,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 getLocation();
             } else {
                 Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                pgbar.setVisibility(View.GONE);
             }
         }
     }
