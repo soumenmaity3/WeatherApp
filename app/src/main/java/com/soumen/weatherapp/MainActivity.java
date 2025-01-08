@@ -1,11 +1,14 @@
 package com.soumen.weatherapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
 import androidx.activity.EdgeToEdge;
@@ -76,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
                 pgbar.setVisibility(View.VISIBLE);
                 edtText.setText("");
                 edtText.clearFocus();
+                InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm!=null){
+                    imm.hideSoftInputFromWindow(edtText.getWindowToken(),0);
+                }
             }
         });
 
