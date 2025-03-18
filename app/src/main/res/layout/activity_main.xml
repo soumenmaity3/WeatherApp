@@ -11,12 +11,13 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/idTextINLay"
         style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="20dp"
         android:hint="Search City for Weather">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/idEditData"
             android:layout_width="match_parent"
@@ -63,24 +64,29 @@
         android:padding="16dp"
         android:text="Weather information will be displayed here."
         android:textSize="16sp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Soumen Maity"
+
+    <ImageView
         android:id="@+id/contact"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="33dp"
+        android:src="@drawable/baseline_attach_email_24" />
+
     <com.google.android.gms.ads.AdView
+        android:id="@+id/ad_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:adUnitId="@string/banner_ad_uni_id"
-        app:adSize="BANNER"
-        android:id="@+id/ad_view" />
+        app:adSize="BANNER" />
+
     <ProgressBar
+        android:id="@+id/progress_circular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progress_circular"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/textViewWeather"/>
 </RelativeLayout>

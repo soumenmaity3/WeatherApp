@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethod;
@@ -39,11 +40,12 @@ import java.util.concurrent.Executors;
 public class MainActivity extends AppCompatActivity {
     TextInputEditText edtText;
     Button btnSearch, btnSearchLocation;
-    TextView txtWeather,soumen;
+    TextView txtWeather;
     WeatherService weatherService;
     FusedLocationProviderClient fusedLocationClient;
     ProgressBar pgbar;
     AdView adView;
+    ImageView soumen;
 
     double latitude, longitude;
 
@@ -65,15 +67,29 @@ public class MainActivity extends AppCompatActivity {
         btnSearchLocation = findViewById(R.id.buttonGetLocation);
         txtWeather = findViewById(R.id.textViewWeather);
         pgbar = findViewById(R.id.progress_circular);
-        adView=findViewById(R.id.ad_view);
-        soumen=findViewById(R.id.contact);
+        adView = findViewById(R.id.ad_view);
+        soumen = findViewById(R.id.contact);
 
-        soumen.setOnClickListener(v->{
-            Intent intent=new Intent(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT,"I want to contact with you.");
-            startActivity(Intent.createChooser(intent,"Share Via"));
+
+        soumen.setOnClickListener(v -> {
+            String email = "sm8939912@gmail.com";
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+
+            // Correct URI format for email
+            intent.setData(Uri.parse("mailto:" + email));
+
+            // Add email subject and body
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Contact Request");
+            intent.putExtra(Intent.EXTRA_TEXT, "I want to contact with you.");
+
+            try {
+                startActivity(Intent.createChooser(intent, "Choose Email App"));
+            } catch (Exception e) {
+                Toast.makeText(v.getContext(), "No email apps installed!", Toast.LENGTH_SHORT).show();
+            }
         });
+
+
 
         pgbar.setVisibility(View.GONE);
         weatherService = new WeatherService();
@@ -86,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         MobileAds.initialize(this);
-        AdRequest adRequest=new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
 
 
@@ -98,9 +114,9 @@ public class MainActivity extends AppCompatActivity {
                 pgbar.setVisibility(View.VISIBLE);
                 edtText.setText("");
                 edtText.clearFocus();
-                InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm!=null){
-                    imm.hideSoftInputFromWindow(edtText.getWindowToken(),0);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(edtText.getWindowToken(), 0);
                 }
             }
         });
