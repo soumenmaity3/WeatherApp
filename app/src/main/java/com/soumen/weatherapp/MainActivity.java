@@ -2,6 +2,7 @@ package com.soumen.weatherapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -38,7 +39,7 @@ import java.util.concurrent.Executors;
 public class MainActivity extends AppCompatActivity {
     TextInputEditText edtText;
     Button btnSearch, btnSearchLocation;
-    TextView txtWeather;
+    TextView txtWeather,soumen;
     WeatherService weatherService;
     FusedLocationProviderClient fusedLocationClient;
     ProgressBar pgbar;
@@ -65,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
         txtWeather = findViewById(R.id.textViewWeather);
         pgbar = findViewById(R.id.progress_circular);
         adView=findViewById(R.id.ad_view);
+        soumen=findViewById(R.id.contact);
+
+        soumen.setOnClickListener(v->{
+            Intent intent=new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT,"I want to contact with you.");
+            startActivity(Intent.createChooser(intent,"Share Via"));
+        });
 
         pgbar.setVisibility(View.GONE);
         weatherService = new WeatherService();
