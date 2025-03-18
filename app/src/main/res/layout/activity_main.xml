@@ -69,7 +69,13 @@
         android:text="Soumen Maity"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
-
+    <com.google.android.gms.ads.AdView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:adUnitId="@string/banner_ad_uni_id"
+        app:adSize="BANNER"
+        android:id="@+id/ad_view" />
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

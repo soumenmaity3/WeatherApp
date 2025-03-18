@@ -19,6 +19,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     WeatherService weatherService;
     FusedLocationProviderClient fusedLocationClient;
     ProgressBar pgbar;
+    AdView adView;
 
     double latitude, longitude;
 
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         btnSearchLocation = findViewById(R.id.buttonGetLocation);
         txtWeather = findViewById(R.id.textViewWeather);
         pgbar = findViewById(R.id.progress_circular);
+        adView=findViewById(R.id.ad_view);
 
         pgbar.setVisibility(View.GONE);
         weatherService = new WeatherService();
@@ -70,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
         }
+
+        MobileAds.initialize(this);
+        AdRequest adRequest=new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override

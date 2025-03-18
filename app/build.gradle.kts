@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.soumen.weatherapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.soumen.weatherapp"
@@ -42,5 +42,6 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.9.3")
     implementation ("com.google.code.gson:gson:2.8.9")
     implementation ("com.google.android.gms:play-services-location:18.0.0")
+    implementation ("com.google.android.gms:play-services-ads:24.1.0")
     androidTestImplementation(libs.espresso.core)
 }
