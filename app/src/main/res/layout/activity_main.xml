@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -14,8 +13,8 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
         android:hint="Search City for Weather">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -32,8 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/idTextINLay"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="#1E88E5"
         android:text="Get Weather"
         android:textColor="@color/white"
@@ -45,8 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonGetWeather"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="#43A047"
         android:text="Get Weather in Your Location"
         android:textColor="@color/white"
@@ -58,8 +57,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonGetLocation"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:padding="16dp"
         android:text="Weather information will be displayed here."
@@ -80,13 +79,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:adUnitId="@string/banner_ad_uni_id"
-        app:adSize="BANNER" />
+        app:adSize="BANNER"
+        app:adUnitId="@string/banner_ad_uni_id" />
 
     <ProgressBar
         android:id="@+id/progress_circular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textViewWeather"/>
-</RelativeLayout>
+        android:layout_below="@+id/textViewWeather"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSearchInGoogle"
+        android:layout_below="@+id/progress_circular"
+        android:text="More Details"
+        android:backgroundTint="#637BFF"
+        android:visibility="gone"/>
+
+    </RelativeLayout>

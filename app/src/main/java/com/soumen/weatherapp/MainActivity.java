@@ -39,7 +39,7 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     TextInputEditText edtText;
-    Button btnSearch, btnSearchLocation;
+    Button btnSearch, btnSearchLocation,btnSearchInGoogle;
     TextView txtWeather;
     WeatherService weatherService;
     FusedLocationProviderClient fusedLocationClient;
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         pgbar = findViewById(R.id.progress_circular);
         adView = findViewById(R.id.ad_view);
         soumen = findViewById(R.id.contact);
-
+        btnSearchInGoogle=findViewById(R.id.btnSearchInGoogle);
 
         soumen.setOnClickListener(v -> {
             String email = "sm8939912@gmail.com";
@@ -87,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Toast.makeText(v.getContext(), "No email apps installed!", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        soumen.setOnLongClickListener(v->{
+            Toast.makeText(this, "Contact with Developer \"Soumen Maity\"", Toast.LENGTH_LONG).show();
+            return true;
         });
 
 
@@ -128,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 pgbar.setVisibility(View.VISIBLE);
             }
         });
+
     }
 
     private void checkAndRequestLocationPermission() {
@@ -187,37 +193,53 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     WeatherResponse weather = weatherService.getWeather(city);
 
-                    String rainData;
-                    if (weather != null) {
-                        if (weather.bristy != null) {
-                            rainData = "Rain: " + weather.bristy.rain + " mm";
-                        } else {
-                            rainData = "0 mm";
-                        }
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                txtWeather.setText("City name: " + city + "\nTemperature: " + weather.main.temp + " °C\n" +
-                                        "Pressure: " + weather.main.pressure + " hPa\n" +
-                                        "Humidity: " + weather.main.humidity + " %\n" +
-                                        "Wind: " + weather.wind.speed * 3.6f + " KMpH\n" +
-                                        "Direction: " + weather.wind.deg + "°\n" +
-                                        "Rain(Now): " + rainData + "\n" +
-                                        "Cloud: " + weather.main.clouds);
-                                pgbar.setVisibility(View.GONE);
-                            }
-                        });
-                    } else {
+                    if (weather == null || weather.main == null || weather.wind == null) {
                         runOnUiThread(() -> {
                             showError("City not found or invalid data");
                             pgbar.setVisibility(View.GONE);
+                            btnSearchInGoogle.setVisibility(View.GONE);
                         });
+                        return;
                     }
+
+                    // Rain data
+                    String rainData = "Rain: 0 mm";
+                    if (weather.bristy != null && weather.bristy.oneHourRain > 0) {
+                        rainData = "Rain: " + weather.bristy.oneHourRain + " mm";
+                    }
+
+                    // Cloud data (Fixed access)
+                    String cloudData = "Cloud: " + (weather.clouds != null ? weather.clouds.all : "No data");
+
+                    // Final UI update
+                    String finalRainData = rainData;
+                    String finalCloudData = cloudData;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtWeather.setText("City name: " + city + "\nTemperature: " + weather.main.temp + " °C\n" +
+                                    "Pressure: " + weather.main.pressure + " hPa\n" +
+                                    "Humidity: " + weather.main.humidity + " %\n" +
+                                    "Wind: " + (weather.wind.speed * 3.6f) + " KMpH\n" +
+                                    "Direction: " + weather.wind.deg + "°\n" +
+                                    finalRainData + "\n" +
+                                    finalCloudData+" %");
+                            btnSearchInGoogle.setVisibility(View.VISIBLE);
+                            btnSearchInGoogle.setOnClickListener(v->{
+                                String cityName = city;
+                                String url = "https://www.google.com/search?q=weather+"+cityName;
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                startActivity(intent);
+                            });
+                            pgbar.setVisibility(View.GONE);
+                        }
+                    });
+
                 } catch (Exception e) {
                     runOnUiThread(() -> {
                         showError("Failed to retrieve weather data");
                         pgbar.setVisibility(View.GONE);
+                        btnSearchInGoogle.setVisibility(View.GONE);
                     });
                 }
             }
