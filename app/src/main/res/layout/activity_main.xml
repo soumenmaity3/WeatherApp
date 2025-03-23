@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnSearchInGoogle"
         android:layout_below="@+id/progress_circular"
-        android:text="More Details"
+        android:text="About 5 days"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="#637BFF"
